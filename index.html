@@ -1,22 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<title>Main page</title>
 </head>
-<body>
-    <h1>this index.html file</h1>
-    <p>This is posted on github</p>
-    <h3>edited in a mobile</h3>
-    <h4>Edited in a pc on hithub.com website</h4>
-     <script>
-         function number(n){
-            console.log("number is=",n); 
-            console.log(`square of ${n} is = ${n*n}`);                        
-            console.log(`cube of ${n} is = ${n*n*n}`);
-         }
-         number(25);
-     </script>
+<body style="background-color: yellow;">
+    <h1>BlDE SSM Polytechnic college vijayapur</h1>
+    <div id="sign-in">
+        <b><p id="pa">Enter your email address</p></b>
+        <input type="email" placeholder="   enter email address" class="form">
+        <b><p id="pa">Enter your name</p></b>
+        <input type="text" placeholder="   enter your name" class="form">
+        <b><p id="pa">Enter your Roll no</p></b>
+        <input type="text" placeholder="   enter roll no" class="form">
+    </div>
+    <center>
+        <br>
+        <br>
+        <br>
+    <a href="students.html" style="font-size: 40px;">➡️</a>
+</center>
+    <style>
+        button{
+            background-color: blue;
+            width: 150px; 
+            height: 50px;
+            border-radius: 20px;
+        }
+        button:hover{
+            box-shadow: 10px 10px 60px red;
+        }
+        h1{
+            font-size: 35px;
+            color:indigo;
+            text-align:center;
+        }
+        #sign-in{
+            margin-top: 5px;
+            border-style: solid;
+            border-width: 1px;
+            background-image: url(ssmploy.jpg);
+            margin-left: 550px;
+            width: 500px;
+            height: 400px;
+            background-color: rgb(133, 109, 109);
+            text-align: center;
+            border-radius:30px;
+        }
+        #sign-in:hover{
+            box-shadow: 20px 20px 40px red;
+            border-width: 5px;
+            border-style: solid;
+            border-color: brown;
+            background-color:rgb(192, 192, 37);
+        }
+        #pa{
+            font-size: 25px;
+        }
+        .form{
+            font-size:20px;
+            width: 350px;
+            height: 40px;
+            border-radius:30px;
+            border-width: 1px;
+        }
+        .form:hover{
+            border-color: black;
+            border-width: 3px;
+        }
+    </style>
 </body>
 </html>
