@@ -9,60 +9,27 @@ import java.util.Vector;
 
 public class list_types {
 	public static void main(String[] args) {
-		ArrayList<String> list=new ArrayList<String>();
-		list.add("Ravi");
-		list.add("Vijay");
-		list.add("Raju");
-		list.add("Ajay");
-		Iterator<String> itr=list.iterator();
-		while(itr.hasNext()) {
-			System.out.println(itr.next());
-		}
-		
-		System.out.println();
-		
-		LinkedList<String> l2=new LinkedList<String>();
-		l2.add("one");
-		l2.add("two");
-		l2.add("three");
-		Iterator<String> itr2=l2.iterator();
-		while(itr2.hasNext()) {
-			System.out.println(itr2.next());
-		}
-		
-		System.out.println(); 
-		
-		Vector<String> v=new Vector<String>();
-		v.add("Ayush");
-		v.add("Amit");
-		v.add("Ashish");
-		Iterator<String> itr3=v.iterator();
-		while(itr3.hasNext()) {
-			System.out.println(itr3.next());
-		}
-		
-		System.out.println();
-		
-		Stack<String> s=new Stack<String>();
-		s.push("a");
-		s.push("b");
-		s.push("e");
-		s.push("g");
-		Iterator<String> itr4=s.iterator();
-		while(itr4.hasNext()) {
-			System.out.println(itr4.next());
-		}
-		
-		System.out.println();
-		
-		HashSet<String> set=new HashSet<String>();
-		set.add("a1");
-		set.add("b2");
-		set.add("a2");
-		set.add("a1");
-		Iterator<String> itr5=set.iterator();
-		while(itr5.hasNext()) {
-			System.out.println(itr5.next());
-		}
+		String ANSI_RESET = "\u001B[0m";
+		String ANSI_RED = "\u001B[31m";
+	    String ANSI_GREEN = "\u001B[32m";
+	    String ANSI_YELLOW = "\u001B[33m";
+	    String ANSI_BLUE = "\u001B[34m";
+	    String ANSI_PURPLE = "\u001B[35m";
+	    String ANSI_CYAN = "\u001B[36m";
+	    String ANSI_WHITE = "\u001B[37m";
+	    System.out.println(ANSI_RED + "This text is red!");
+        System.out.println(ANSI_GREEN + "This text is green!");
+        System.out.println(ANSI_YELLOW + "This text is yellow!");
+        System.out.println(ANSI_BLUE + "This text is blue!");
+        System.out.println(ANSI_PURPLE + "This text is purple!" );
+        System.out.println(ANSI_CYAN + "This text is cyan!");
+        System.out.println(ANSI_WHITE + "This text is white!");
+        String colors[]= {"\u001B[31m","\u001B[32m","\u001B[33m",
+        		"\u001B[34m","\u001B[35m","\u001B[37m","\u001B[9m"};
+        Thread t=new Thread();
+        for(String s:colors) {
+        	t.sleep(90);
+        	System.out.print(s+"		");
+        }
 	}
 }
