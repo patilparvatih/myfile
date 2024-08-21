@@ -32,4 +32,27 @@ public class list_types {
         	System.out.print(s+"		");
         }
 	}
+} 
+public class ColorfulText {
+    // ANSI escape codes for resetting and setting RGB colors
+    public static final String RESET = "\u001B[0m";
+
+    // Method to generate ANSI escape code for RGB colors
+    public static String getRGBColor(int r, int g, int b) {
+        return String.format("\u001B[38;2;%d;%d;%dm", r, g, b);
+    }
+
+    public static void main(String[] args) {
+        // Example RGB values
+        int red = 255;
+        int green = 100;
+        int blue = 50;
+
+        // Generate the ANSI escape code for the given RGB values
+        String rgbColor = getRGBColor(red, green, blue);
+
+        // Print the colorful text
+        System.out.println(rgbColor + "This is colorful text!" + RESET);
+    }
 }
+
