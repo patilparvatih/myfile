@@ -34,16 +34,11 @@ public class list_types {
 	}
 } 
 public class ColorfulText {
-    // ANSI escape codes for resetting and setting RGB colors
-    public static final String RESET = "\u001B[0m";
-
-    // Method to generate ANSI escape code for RGB colors
+      public static final String RESET = "\u001B[0m";
     public static String getRGBColor(int r, int g, int b) {
         return String.format("\u001B[38;2;%d;%d;%dm", r, g, b);
     }
-
     public static void main(String[] args) {
-        // Example RGB values
         int red = 255;
         int green = 100;
         int blue = 50;
@@ -53,6 +48,16 @@ public class ColorfulText {
 
         // Print the colorful text
         System.out.println(rgbColor + "This is colorful text!" + RESET);
+
+	    
+	    File f=new File("D://tint1.jpg");
+        BufferedImage img=ImageIO.read(f);
+        int R=255; 
+        int G=0;
+        int B=0;
+        int rgb=(R << 16) | (G<< 8) | B;
+        img.setRGB(100,100, rgb);
+        ImageIO.write(img,"jpg",new File("D://tint2.jpg"));
     }
 }
 
