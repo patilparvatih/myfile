@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Painter</title>
+    <style>
+        body { margin: 0; display: flex; flex-direction: column; align-items: center; }
+        canvas { border: 1px solid black; margin-top: 10px; }
+        .toolbar { display: flex; justify-content: center; margin-top: 10px; }
+        .toolbar > * { margin: 0 5px; }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <button id="undo">Undo</button>
+        <button id="redo">Redo</button>
+        <input type="color" id="brushColor" value="#000000">
+        <input type="color" id="bgColor" value="#ffffff">
+        <input type="range" id="brushWidth" min="1" max="50" value="5">
+        <select id="shape">
+            <option value="free">Free Draw</option>
+            <option value="line">Line</option>
+            <option value="rectangle">Rectangle</option>
+            <option value="circle">Circle</option>
+        </select>
+        <button id="select">Select</button>
+        <button id="delete">Delete</button>
+    </div>
+    <canvas id="canvas" width="1500" height="700"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let x = 0, y = 0;
+        let history = [], redoList = [];
+        let brushColor = document.getElementById('brushColor').value;
+        let bgColor = document.getElementById('bgColor').value;
+        let brushWidth = document.getElementById('brushWidth').value;
+        let shape = document.getElementById('shape').value;
+        let isSelecting = false;
+        let selectedArea = null;
+
+        document.getElementById('brushColor').addEventListener('change', (e) => brushColor = e.target.value);
+        document.getElementById('bgColor').addEventListener('change', (e) => {
+            bgColor = e.target.value;
+            canvas.style.backgroundColor = bgColor;
+        });
+        document.getElementById('brushWidth').addEventListener('change', (e) => brushWidth = e.target.value);
+        document.getElementById('shape').addEventListener('change', (e) => shape = e.target.value);
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mousemove', draw);
+
+        document.getElementById('undo').addEventListener('click', undo);
+        document.getElementById('redo').addEventListener('click', redo);
+        document.getElementById('select').addEventListener('click', () => isSelecting = true);
+        document.getElementById('delete').addEventListener('click', deleteSelection);
+
+        function startDrawing(e) {
+            if (isSelecting) {
+                selectedArea = { x: e.offsetX, y: e.offsetY, width: 0, height: 0 };
+                isDrawing = true;
+                return;
+            }
+            isDrawing = true;
+            [x, y] = [e.offsetX, e.offsetY];
+            saveState();
+        }
+
+        function stopDrawing(e) {
+            if (isSelecting && isDrawing) {
+                selectedArea.width = e.offsetX - selectedArea.x;
+                selectedArea.height = e.offsetY - selectedArea.y;
+                isDrawing = false;
+                isSelecting = false;
+                return;
+            }
+            isDrawing = false;
+            ctx.beginPath();
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            ctx.lineWidth = brushWidth;
+            ctx.strokeStyle = brushColor;
+            ctx.lineCap = 'round';
+
+            if (isSelecting) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                restoreState();
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([5, 5]);
+                ctx.strokeRect(selectedArea.x, selectedArea.y, e.offsetX - selectedArea.x, e.offsetY - selectedArea.y);
+                ctx.setLineDash([]);
+                return;
+            }
+
+            if (shape === 'free') {
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(e.offsetX, e.offsetY);
+            } else if (shape === 'line') {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                restoreState();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+            } else if (shape === 'rectangle') {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                restoreState();
+                ctx.beginPath();
+                ctx.rect(x, y, e.offsetX - x, e.offsetY - y);
+                ctx.stroke();
+            } else if (shape === 'circle') {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                restoreState();
+                ctx.beginPath();
+                let radius = Math.sqrt(Math.pow(e.offsetX - x, 2) + Math.pow(e.offsetY - y, 2));
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+
+        function saveState() {
+            history.push(canvas.toDataURL());
+            if (history.length > 10) history.shift();
+            redoList = [];
+        }
+
+        function restoreState() {
+            let img = new Image();
+            img.src = history[history.length - 1];
+            img.onload = () => ctx.drawImage(img, 0, 0);
+        }
+
+        function undo() {
+            if (history.length > 0) {
+                redoList.push(history.pop());
+                let img = new Image();
+                img.src = history[history.length - 1];
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+            }
+        }
+
+        function redo() {
+            if (redoList.length > 0) {
+                let img = new Image();
+                img.src = redoList.pop();
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+                history.push(img.src);
+            }
+        }
+
+        function deleteSelection() {
+            if (selectedArea) {
+                ctx.clearRect(selectedArea.x, selectedArea.y, selectedArea.width, selectedArea.height);
+                saveState();
+                selectedArea = null;
+            }
+        }
+    </script>
+</body>
+</html>
